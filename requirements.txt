@@ -1,0 +1,5 @@
+cloudinary
+flask
+jinja2
+gunicorn
+flask-sqlalchemy
