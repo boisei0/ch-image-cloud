@@ -27,4 +27,4 @@ class OAuthRedirect(View):
             # TODO: Handle error
             return jsonify(data)
 
-        return "DEBUG: {user_id}, {access_token}".format(**data)
+        return jsonify(data)
