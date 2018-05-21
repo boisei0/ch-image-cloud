@@ -11,4 +11,7 @@ def create_app(config):
     app.config.from_object(config)
     db.init_app(app)
 
+    from .views import OAuthRedirect
+    app.add_url_rule('/slack/auth', OAuthRedirect.endpoint, view_func=OAuthRedirect.as_view(OAuthRedirect.endpoint))
+
     return app

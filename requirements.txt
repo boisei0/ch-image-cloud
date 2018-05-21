@@ -1,5 +1,7 @@
 cloudinary
 flask
 jinja2
+werkzeug
+requests
 gunicorn
 flask-sqlalchemy
