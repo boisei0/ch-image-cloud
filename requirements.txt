@@ -5,3 +5,4 @@ werkzeug
 requests
 gunicorn
 flask-sqlalchemy
+psycopg2

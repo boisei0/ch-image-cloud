@@ -1,11 +1,18 @@
 # encoding=utf-8
-from flask import request, jsonify
+from flask import request, jsonify, render_template
 from flask.views import View
 from werkzeug.exceptions import BadRequest
 
 import requests
 
-from .config import SLACK_OAUTH_STATE, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET
+from .config import SLACK_OAUTH_STATE, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, SLACK_CH_TEAM_ID
+
+
+class Index(View):
+    endpoint = 'index'
+
+    def dispatch_request(self):
+        return render_template('index.html', client_id=SLACK_CLIENT_ID, state=SLACK_OAUTH_STATE)
 
 
 class OAuthRedirect(View):
@@ -26,5 +33,8 @@ class OAuthRedirect(View):
         if not data['ok']:
             # TODO: Handle error
             return jsonify(data)
+
+        if data['team']['id'] != SLACK_CH_TEAM_ID:
+            return "Sorry this application is limited to users from Clexa Haven"
 
         return jsonify(data)
