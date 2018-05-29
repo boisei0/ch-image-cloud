@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 
-from wtforms import StringField, SelectMultipleField, validators
+from wtforms import StringField, SelectMultipleField, validators, SubmitField
 
 
 class Select2MultipleField(SelectMultipleField):
@@ -23,6 +23,7 @@ class UploadForm(FlaskForm):
     tags = Select2MultipleField('Tags: ', render_kw={
         'multiple': 'multiple'
     })
+    submit = SubmitField('Save')
 
 
 class UploadEditForm(FlaskForm):
@@ -30,3 +31,4 @@ class UploadEditForm(FlaskForm):
     tags = Select2MultipleField('Tags: ', render_kw={
         'multiple': 'multiple'
     })
+    submit = SubmitField('Save')

@@ -23,6 +23,8 @@
                     </div>
                 {% endfor %}
             </div>
+        {% else %}
+            <img class="img-fluid" src="{% cloudinary_url public_id, secure=true %}" alt="{{ public_id }}">
         {% endif %}
         <div class="form-group">
             {{ form.title.label }}
@@ -44,6 +46,8 @@
                 </div>
             {% endfor %}
         </div>
+
+        {{ form.submit(class_="btn btn-primary") }}
     </form>
 {% endblock content %}
 
