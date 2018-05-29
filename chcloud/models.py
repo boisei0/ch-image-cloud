@@ -21,12 +21,15 @@ class User(db.Model, UserMixin):
     api_key = db.Column('slack_api_key', db.String(length=255), nullable=False)
     slack_id = db.Column('slack_user_id', db.String(length=15), unique=True, nullable=False)
 
+    show_nsfw = db.Column('show_nsfw', db.Boolean(), default=False, nullable=False)
+
     # uploads = db.Relationship('Upload', back_populates='user')
 
-    def __init__(self, display_name, api_key, slack_id):
+    def __init__(self, display_name, api_key, slack_id, show_nsfw=False):
         self.display_name = display_name
         self.api_key = api_key
         self.slack_id = slack_id
+        self.show_nsfw = show_nsfw
 
     def get_id(self):
         return str(self.id)
