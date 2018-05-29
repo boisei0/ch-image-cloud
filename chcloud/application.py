@@ -40,7 +40,7 @@ def create_app(config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
 
-    from .views import OAuthRedirect, Index, Gallery, GalleryEdit, APITags
+    from .views import OAuthRedirect, Index, Gallery, GalleryEdit, APITags, Logout, Settings
     app.add_url_rule('/', Index.endpoint, view_func=Index.as_view(Index.endpoint))
     app.add_url_rule('/slack/auth', OAuthRedirect.endpoint, view_func=OAuthRedirect.as_view(OAuthRedirect.endpoint))
     app.add_url_rule('/gallery', Gallery.endpoint, view_func=Gallery.as_view(Gallery.endpoint))
@@ -50,6 +50,10 @@ def create_app(config):
                      view_func=gallery_edit_view, defaults={'public_id': None})
     app.add_url_rule('/gallery/edit/<string:public_id>', GalleryEdit.endpoint, methods=['GET', 'POST'],
                      view_func=gallery_edit_view)
+
+    app.add_url_rule('/logout', Logout.endpoint, view_func=Logout.as_view(Logout.endpoint), methods=['GET'])
+    app.add_url_rule('/settings', Settings.endpoint, view_func=Settings.as_view(Settings.endpoint),
+                     methods=['GET', 'POST'])
 
     app.add_url_rule('/api/tags', APITags.endpoint, view_func=APITags.as_view(APITags.endpoint), methods=['GET'])
 

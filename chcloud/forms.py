@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 
-from wtforms import StringField, SelectMultipleField, validators, SubmitField
+from wtforms import StringField, SelectMultipleField, validators, SubmitField, BooleanField
 
 
 class Select2MultipleField(SelectMultipleField):
@@ -31,4 +31,9 @@ class UploadEditForm(FlaskForm):
     tags = Select2MultipleField('Tags: ', render_kw={
         'multiple': 'multiple'
     })
+    submit = SubmitField('Save')
+
+
+class SettingsForm(FlaskForm):
+    show_nsfw = BooleanField('Show NSFW content: ')
     submit = SubmitField('Save')

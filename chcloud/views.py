@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest
 from itsdangerous import URLSafeSerializer
 
 import requests
-from flask_login import login_user, login_required, current_user
+from flask_login import login_user, login_required, current_user, logout_user
 
 import cloudinary
 import cloudinary.api
@@ -18,7 +18,7 @@ from .config import (
 )
 from .application import db, login_manager
 from .models import User
-from .forms import UploadForm, UploadEditForm
+from .forms import UploadForm, UploadEditForm, SettingsForm
 
 cloudinary.config(cloud_name=CLOUDINARY_CLOUD_NAME, api_key=CLOUDINARY_API_KEY, api_secret=CLOUDINARY_API_SECRET)
 
@@ -174,6 +174,34 @@ class GalleryEdit(MethodView):
         else:
             return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected,
                                    s_tags_selected=s_tags_selected)
+
+
+class Settings(View):
+    endpoint = 'settings'
+    decorators = [login_required]
+
+    def dispatch_request(self):
+        form = SettingsForm()
+
+        if not form.is_submitted():
+            form.show_nsfw.data = current_user.show_nsfw
+
+        if form.validate_on_submit():
+            user = User.query.filter(User.id == current_user.id).first()
+            user.show_nsfw = form.show_nsfw.data
+            db.session.commit()
+            return redirect(url_for(Gallery.endpoint))
+        else:
+            return render_template('settings.html', form=form)
+
+
+class Logout(View):
+    endpoint = 'logout'
+    decorators = [login_required]
+
+    def dispatch_request(self):
+        logout_user()
+        return redirect(url_for('index'))
 
 
 class APITags(View):

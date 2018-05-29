@@ -1,0 +1,21 @@
+{% extends 'base_layout.html' %}
+{% block title %}{{ super() }} - Settings{% endblock title %}
+
+{% block content %}
+    <h1>Settings</h1>
+
+    <form method="POST" action="{{ url_for('settings') }}">
+        <div class="form-group">
+            {{ form.show_nsfw.label }}
+            {{ form.show_nsfw(class_='form-control') }}
+
+            {% for error in form.show_nsfw.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class_='btn btn-primary') }}
+    </form>
+{% endblock content %}
