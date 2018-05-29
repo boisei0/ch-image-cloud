@@ -21,7 +21,7 @@ class User(db.Model, UserMixin):
     api_key = db.Column('slack_api_key', db.String(length=255), nullable=False)
     slack_id = db.Column('slack_user_id', db.String(length=15), unique=True, nullable=False)
 
-    show_nsfw = db.Column('show_nsfw', db.Boolean(), default=False, nullable=False)
+    show_nsfw = db.Column('show_nsfw', db.Boolean(), default=False)
 
     # uploads = db.Relationship('Upload', back_populates='user')
 

@@ -1,11 +1,13 @@
 # encoding=utf-8
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_login import LoginManager
 
 from .jinja2_cloudinary_helper import CloudinaryTagExtension, CloudinaryURLExtension
 
 db = SQLAlchemy()
+migrate = Migrate()
 login_manager = LoginManager()
 
 
@@ -35,6 +37,7 @@ def create_app(config):
     app.jinja_env.add_extension(CloudinaryTagExtension)
 
     db.init_app(app)
+    migrate.init_app(app, db)
     login_manager.init_app(app)
 
     from .views import OAuthRedirect, Index, Gallery, APITags
