@@ -1,0 +1,7 @@
+{% extends 'base_layout.html' %}
+
+{% block title %}{{ super() }} - Gallery{% endblock title %}
+
+{% block content %}
+    {% cloudinary_url 'do_it_for_them' %}
+{% endblock content %}

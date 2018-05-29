@@ -1,11 +1,32 @@
 # encoding=utf-8
-from flask import request, jsonify, render_template
+from flask import request, jsonify, render_template, redirect, url_for
 from flask.views import View
 from werkzeug.exceptions import BadRequest
 
 import requests
+from flask_login import login_user, login_required
 
-from .config import SLACK_OAUTH_STATE, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, SLACK_CH_TEAM_ID
+import cloudinary
+import cloudinary.api
+
+from .config import (
+    SLACK_OAUTH_STATE, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, SLACK_CH_TEAM_ID,
+    CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+)
+from .application import db, login_manager
+from .models import User
+
+cloudinary.config(cloud_name=CLOUDINARY_CLOUD_NAME, api_key=CLOUDINARY_API_KEY, api_secret=CLOUDINARY_API_SECRET)
+
+
+@login_manager.unauthorized_handler
+def unauthorised_handler():
+    return redirect(
+        'https://slack.com/oauth/authorize?scope=identity.basic&client_id={client_id}&state={state}'.format(
+            client_id=SLACK_CLIENT_ID,
+            state=SLACK_OAUTH_STATE
+        )
+    )
 
 
 class Index(View):
@@ -37,4 +58,26 @@ class OAuthRedirect(View):
         if data['team']['id'] != SLACK_CH_TEAM_ID:
             return "Sorry this application is limited to users from Clexa Haven"
 
-        return jsonify(data)
+        user = User.query.filter(User.slack_id == data['user']['id']).first()
+        if user:
+            # Update display name
+            user.display_name = data['user']['name']
+        else:
+            # First login
+            user = User(data['user']['name'], data['access_token'], data['user']['id'])
+            db.session.add(user)
+
+        db.session.commit()
+
+        login_user(user)
+
+        return redirect(url_for(Gallery.endpoint))
+
+
+class Gallery(View):
+    endpoint = 'gallery'
+    decorators = [login_required]
+
+    def dispatch_request(self):
+        uploads = cloudinary.api.resources()
+

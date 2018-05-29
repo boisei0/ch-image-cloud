@@ -6,3 +6,6 @@ requests
 gunicorn
 flask-sqlalchemy
 psycopg2
+flask-migrate
+flask-wtf
+flask-login

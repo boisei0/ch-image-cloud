@@ -1,10 +1,7 @@
-<html>
-<head>
-    <title>CH Offsite Image Cloud</title>
-    <meta charset="utf-8">
-</head>
-<body>
+{% extends 'base_layout.html' %}
+{% block content %}
     <h1>Clexa Haven - Offsite Image Cloud</h1>
-    <a href="https://slack.com/oauth/authorize?scope=identity.basic&client_id={{ client_id }}&state={{ state }}"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
-</body>
-</html>
+    <div>
+        <a href="https://slack.com/oauth/authorize?scope=identity.basic&client_id={{ client_id }}&state={{ state }}"><img alt="Sign in with Slack" height="40" width="172" src="https://platform.slack-edge.com/img/sign_in_with_slack.png" srcset="https://platform.slack-edge.com/img/sign_in_with_slack.png 1x, https://platform.slack-edge.com/img/sign_in_with_slack@2x.png 2x" /></a>
+    </div>
+{% endblock content %}
