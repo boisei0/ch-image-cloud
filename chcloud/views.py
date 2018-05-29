@@ -163,13 +163,13 @@ class GalleryEdit(MethodView):
                     cloudinary.uploader.explicit(public_id, context={
                         '_user': current_user.slack_id,
                         'title': form.title.data
-                    })
+                    }, type='upload')
                     cloudinary.uploader.remove_all_tags([public_id])
                 else:
                     cloudinary.uploader.explicit(public_id, tags=form.tags.data, context={
                         '_user': current_user.slack_id,
                         'title': form.title.data
-                    })
+                    }, type='upload')
             return redirect(url_for(Gallery.endpoint))
         else:
             return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected,
