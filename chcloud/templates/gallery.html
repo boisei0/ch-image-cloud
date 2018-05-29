@@ -3,7 +3,9 @@
 {% block title %}{{ super() }} - Gallery{% endblock title %}
 
 {% block content %}
-    <span>NSFW content is hidden by default, unless you allow it to be displayed in your <a>settings</a></span>
+    {% if not current_user.show_nsfw %}
+        <span>NSFW content is hidden by default, unless you allow it to be displayed in your <a>settings</a></span>
+    {% endif %}
 
     <h1>Gallery</h1>
     <div class="card-deck">
@@ -27,10 +29,14 @@
                 <div class="card-body">
                     <h4 class="card-title">{{ photo['context']['custom']['title'] }}</h4>
                     <p class="card-text">Uploaded by: {{ photo['context']['custom']['user'].display_name }}</p>
+                    {% if current_user.slack_id == photo['context']['custom']['user'].slack_id %}
+                        <p class="card-text"><a href="{{ url_for('gallery_edit', public_id=photo['public_id']) }}">Edit photo</a></p>
                     <p class="card-text"><a href="{% cloudinary_url photo['public_id'], secure=true %}">Direct link to photo</a></p>
                     <p class="card-text"><small class="text-muted">Tags: {% if photo['tags'] is defined %}{{ photo['tags']|join(', ') }}{% else %}TODO{% endif %}</small></p>
                 </div>
             </div>
         {% endfor %}
+
+        <a href="{{ url_for('gallery_edit') }}"
     </div>
 {% endblock content %}

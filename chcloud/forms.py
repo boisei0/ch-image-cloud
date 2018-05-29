@@ -2,10 +2,10 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 
-from wtforms import StringField, SelectField, validators
+from wtforms import StringField, SelectMultipleField, validators
 
 
-class Select2MultipleField(SelectField):
+class Select2MultipleField(SelectMultipleField):
     def pre_validate(self, form):
         # Prevent "not a valid choice" error
         pass

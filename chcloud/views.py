@@ -121,13 +121,15 @@ class GalleryEdit(MethodView):
         if public_id is None:
             # new upload
             form = UploadForm()
+            tags_selected = []
         else:
             # existing upload
             form = UploadEditForm()
             res = cloudinary.api.resource(public_id)
             form.title.data = res['context']['custom']['title']
+            tags_selected = res['tags']
 
-        return render_template('gallery_edit.html', form=form, public_id=public_id)
+        return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected)
 
     def post(self, public_id=None):
         form = UploadForm()

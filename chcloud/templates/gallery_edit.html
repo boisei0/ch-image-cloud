@@ -3,10 +3,40 @@
 {% block content %}
     <h1>{% if public_id is none %}New image{% else%}Edit image{% endif %}</h1>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" novalidate action="{{ url_for('gallery_edit', public_id=public_id) }}">
+        {{ form.hidden_tag() }}
+
         {% if public_id is none %}
-            {{ form.image.label }} {{ form.image() }}
+            <div class="form-group">
+                {{ form.image.label }}
+                {{ form.image(class_='form-control') }}
+
+                {% for error in form.image.errors %}
+                    <div class="invalid-feedback">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
         {% endif %}
-        {{ form.title.label }} {{ form.title() }}
+        <div class="form-group">
+            {{ form.title.label }}
+            {{ form.title(class_='form-control') }}
+
+            {% for error in form.title.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.tags.label }}
+            {{ form.tags(class_='form-control') }}
+
+            {% for error in form.tags.errors %}
+                <div class="invalid-feedback">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
     </form>
 {% endblock content %}
