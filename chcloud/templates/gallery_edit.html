@@ -52,35 +52,28 @@
 
     <script type="application/javascript">
         $(document).ready(function() {
-            var data = [
-                {
-                    id: 'placeholder',
-                    text: 'placeholder'
-                }
-            ];
-
             $.getJSON('{{ url_for('api_tags') }}', function(res) {
-                data = res['results'];
+                var data = res['results'];
+
+                $('#{{ form.tags.id }}').select2({
+                    data: data,
+                    tags: true,
+                    tokenSeparators: [','],
+                    createTag: function (params) {
+                        var term = $.trim(params.term);
+
+                        if (term === '') {
+                            return null;
+                        }
+
+                        return {
+                            id: term,
+                            text: term,
+                            newTag: true // add additional parameters
+                        }
+                    }
+                })
             });
-
-            $('#{{ form.tags.id }}').select2({
-                data: data,
-                tags: true,
-                tokenSeparators: [','],
-                createTag: function (params) {
-                    var term = $.trim(params.term);
-
-                    if (term === '') {
-                        return null;
-                    }
-
-                    return {
-                        id: term,
-                        text: term,
-                        newTag: true // add additional parameters
-                    }
-                }
-            })
         })
     </script>
 {% endblock script_content %}
