@@ -1,5 +1,12 @@
 {% extends 'base_layout.html' %}
 {% block title %}{{ super() }} - Edit{% endblock title %}
+
+{% block head_content %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+{% endblock head_content %}
+
+
 {% block content %}
     <h1>{% if public_id is none %}New image{% else%}Edit image{% endif %}</h1>
 
@@ -40,3 +47,34 @@
         </div>
     </form>
 {% endblock content %}
+
+{% block script_content %}
+    <script type="application/javascript">
+        $(document).ready(function() {
+            var data;
+
+            $.getJSON('{{ url_for('api_tags') }}', function(res) {
+                data = res;
+            });
+
+            $('#{{ form.tags.id }}').select2({
+                data: data,
+                tags: true,
+                tokenSeparators: [','],
+                createTag: function (params) {
+                    var term = $.trim(params.term);
+
+                    if (term === '') {
+                        return null;
+                    }
+
+                    return {
+                        id: term,
+                        text: term,
+                        newTag: true // add additional parameters
+                    }
+                }
+            })
+        })
+    </script>
+{% endblock script_content %}
