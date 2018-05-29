@@ -5,7 +5,7 @@ werkzeug
 requests
 gunicorn
 flask-sqlalchemy
-psycopg2
+psycopg2-binary
 flask-migrate
 flask-wtf
 flask-login
