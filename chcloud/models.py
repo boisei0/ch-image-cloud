@@ -1,5 +1,5 @@
 # encoding=utf-8
-# import hashlib
+from collections import namedtuple
 
 from flask_login import UserMixin
 
@@ -41,6 +41,19 @@ class User(db.Model, UserMixin):
                 return user
         else:
             raise NotImplementedError
+
+    @classmethod
+    def from_context(cls, context_value_as_string, mock=False):
+        _mock_user = namedtuple('User', ['id', 'display_name', 'slack_id', 'api_key', 'show_nsfw'])
+
+        user = cls.query.filter(cls.slack_id == context_value_as_string).first()
+        if not user:
+            if mock:
+                return _mock_user(-1, 'Unknown user', '', 'xoxp-undefined', False)
+            else:
+                raise ValueError('User not found')
+        else:
+            return user
 
 
 # class Upload(db.Model):

@@ -1,0 +1,12 @@
+{% extends 'base_layout.html' %}
+{% block title %}{{ super() }} - Edit{% endblock title %}
+{% block content %}
+    <h1>{% if public_id is none %}New image{% else%}Edit image{% endif %}</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% if public_id is none %}
+            {{ form.image.label }} {{ form.image() }}
+        {% endif %}
+        {{ form.title.label }} {{ form.title() }}
+    </form>
+{% endblock content %}

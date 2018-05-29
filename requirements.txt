@@ -7,5 +7,6 @@ gunicorn
 flask-sqlalchemy
 psycopg2-binary
 flask-migrate
+wtforms
 flask-wtf
 flask-login
