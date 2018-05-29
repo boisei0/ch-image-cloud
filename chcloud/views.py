@@ -129,6 +129,8 @@ class GalleryEdit(MethodView):
             form.title.data = res['context']['custom']['title']
             tags_selected = res['tags']
 
+        form.tags.choices = [('placeholder', 'placeholder')]
+
         return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected)
 
     def post(self, public_id=None):
