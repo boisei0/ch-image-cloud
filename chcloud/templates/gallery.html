@@ -23,8 +23,8 @@
             <div class="card mb-4">
                 <img class="card-img-top img-fluid" src="{% cloudinary_url photo['public_id'], width=300 %}" alt="{{ photo['public_id'] }}">
                 <div class="card-body">
-                    <h4 class="card-title">{{ photo['public_id'] }}</h4>
-                    <p class="card-text"><small class="text-muted">Tags: TODO</small></p>
+                    <h4 class="card-title">{{ photo['context']['custom']['title']|default(photo['public_id']) }}</h4>
+                    <p class="card-text"><small class="text-muted">Tags: {{ photo['tags']|join(', ')|default('TODO') }}</small></p>
                 </div>
             </div>
         {% endfor %}

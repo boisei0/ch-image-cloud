@@ -79,6 +79,6 @@ class Gallery(View):
     decorators = [login_required]
 
     def dispatch_request(self):
-        uploads = cloudinary.api.resources()
+        uploads = cloudinary.api.resources(tags=True, context=True)
         return render_template('gallery.html', uploads=uploads['resources'])
 
