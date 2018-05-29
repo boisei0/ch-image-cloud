@@ -54,6 +54,19 @@
         $(document).ready(function() {
             $.getJSON('{{ url_for('api_tags') }}', function(res) {
                 var data = res['results'];
+                var tags_selected = {{ tags_selected }};
+
+                if (tags_selected.length > 0) {
+                    data = data.map(function (item) {
+                        if (tags_selected.indexOf(item['text']) !== -1) {
+                            item.selected = true;
+                        }
+                        return item
+                    });
+                }
+
+                // Delete render placeholder
+                $('#{{ form.tags.id }}').empty();
 
                 $('#{{ form.tags.id }}').select2({
                     data: data,
