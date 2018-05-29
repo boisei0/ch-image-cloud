@@ -37,9 +37,11 @@ def create_app(config):
     db.init_app(app)
     login_manager.init_app(app)
 
-    from .views import OAuthRedirect, Index, Gallery
+    from .views import OAuthRedirect, Index, Gallery, APITags
     app.add_url_rule('/', Index.endpoint, view_func=Index.as_view(Index.endpoint))
     app.add_url_rule('/slack/auth', OAuthRedirect.endpoint, view_func=OAuthRedirect.as_view(OAuthRedirect.endpoint))
     app.add_url_rule('/gallery', Gallery.endpoint, view_func=Gallery.as_view(Gallery.endpoint))
+
+    app.add_url_rule('/api/tags', APITags.endpoint, view_func=APITags.as_view(APITags.endpoint), methods=['GET'])
 
     return app

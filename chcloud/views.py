@@ -1,5 +1,6 @@
 # encoding=utf-8
 from collections import namedtuple
+
 from flask import request, jsonify, render_template, redirect, url_for
 from flask.views import View
 from werkzeug.exceptions import BadRequest
@@ -108,3 +109,15 @@ class Gallery(View):
 
         return render_template('gallery.html', uploads=uploads)
 
+
+class APITags(View):
+    endpoint = 'api_tags'
+    decorators = [login_required]
+
+    def dispatch_request(self):
+        tags = cloudinary.api.tags()['tags']
+        tags = [tag for tag in tags if not tag.startswith('user:')]
+
+        return jsonify({
+            'tags': tags
+        })
