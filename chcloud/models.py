@@ -17,9 +17,9 @@ from .application import db
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column('id', db.Integer, primary_key=True)
-    display_name = db.Column('display_name', db.Varchar(length=100), nullable=False)
-    api_key = db.Column('slack_api_key', db.Varchar(length=255), nullable=False)
-    slack_id = db.Column('slack_user_id', db.Varchar(length=15), unique=True, nullable=False)
+    display_name = db.Column('display_name', db.String(length=100), nullable=False)
+    api_key = db.Column('slack_api_key', db.String(length=255), nullable=False)
+    slack_id = db.Column('slack_user_id', db.String(length=15), unique=True, nullable=False)
 
     # uploads = db.Relationship('Upload', back_populates='user')
 
