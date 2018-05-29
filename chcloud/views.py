@@ -117,8 +117,12 @@ class Gallery(View):
                         '_user': '',
                     }
                 }
+            try:
+                _user_id = upload['context']['custom']['_user']
+            except KeyError:
+                _user_id = ''
 
-            user = User.from_context(upload['context']['custom']['_user'], mock=True)
+            user = User.from_context(_user_id, mock=True)
             upload['context']['custom']['user'] = user
 
         return render_template('gallery.html', uploads=uploads)
