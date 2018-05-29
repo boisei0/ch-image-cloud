@@ -1,4 +1,5 @@
 # encoding=utf-8
+from collections import namedtuple
 from flask import request, jsonify, render_template, redirect, url_for
 from flask.views import View
 from werkzeug.exceptions import BadRequest
@@ -79,6 +80,31 @@ class Gallery(View):
     decorators = [login_required]
 
     def dispatch_request(self):
-        uploads = cloudinary.api.resources(tags=True, context=True)
-        return render_template('gallery.html', uploads=uploads['resources'])
+        uploads = cloudinary.api.resources(tags=True, context=True)['resources']
+
+        # preprocess uploads:
+        for upload in uploads:
+            _to_pop = None
+            for tag in upload['tags']:
+                if tag.startswith('user:'):
+                    try:
+                        user = User.from_tag(tag)
+                    except ValueError:
+                        # mock user
+                        _user = namedtuple('User', ['display_name'])
+                        user = _user('Unknown user')
+                    if 'context' not in upload:
+                        upload['context'] = {
+                            'custom': {
+                                '_user': user.display_name
+                            }
+                        }
+                    else:
+                        upload['context']['custom']['_user'] = user.display_name
+                    _to_pop = tag
+                    break
+            if _to_pop:
+                upload['tags'].pop(_to_pop)
+
+        return render_template('gallery.html', uploads=uploads)
 

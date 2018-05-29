@@ -24,6 +24,7 @@
                 <img class="card-img-top img-fluid" src="{% cloudinary_url photo['public_id'], width=300 %}" alt="{{ photo['public_id'] }}">
                 <div class="card-body">
                     <h4 class="card-title">{% if photo['context'] is defined %}{{ photo['context']['custom']['title'] }}{% else %}{{ photo['public_id'] }}{% endif %}</h4>
+                    <p class="card-text">Uploaded by: {% if photo['context'] is defined %}{{ photo['context']['custom']['_user'] }}{% else %}Unknown user{% endif %}</p>
                     <p class="card-text"><small class="text-muted">Tags: {% if photo['tags'] is defined %}{{ photo['tags']|join(', ') }}{% else %}TODO{% endif %}</small></p>
                 </div>
             </div>

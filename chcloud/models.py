@@ -31,6 +31,17 @@ class User(db.Model, UserMixin):
     def get_id(self):
         return str(self.id)
 
+    @classmethod
+    def from_tag(cls, tag_as_string):
+        if tag_as_string.startswith('user:'):
+            user = cls.query.filter(cls.slack_id == tag_as_string[5:]).first()
+            if not user:
+                raise ValueError('User not found')
+            else:
+                return user
+        else:
+            raise NotImplementedError
+
 
 # class Upload(db.Model):
 #     __tablename__ = 'upload'
