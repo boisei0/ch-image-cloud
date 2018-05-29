@@ -104,7 +104,7 @@ class Gallery(View):
                     _to_pop = tag
                     break
             if _to_pop:
-                upload['tags'].pop(_to_pop)
+                upload['tags'].remove(_to_pop)
 
         return render_template('gallery.html', uploads=uploads)
 
