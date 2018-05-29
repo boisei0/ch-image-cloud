@@ -146,13 +146,31 @@ class GalleryEdit(MethodView):
         tags_selected = self._serialiser.loads(s_tags_selected)
 
         if form.validate_on_submit():
-            print(form.tags.data)
             if public_id is None:
                 # new upload
-                # TODO: continue here
-                cloudinary.uploader.upload(form.image.data)
+                cloudinary.uploader.upload(
+                    form.image.data,
+                    tags=form.tags.data,
+                    context={
+                        '_user': current_user.slack_id,
+                        'title': form.title.data
+                    }
+                )
             else:
-                pass
+                # Edit existing upload, wait for the fun to start...
+                if not form.tags.data and tags_selected != form.tags.data:
+                    # aka tags are now empty and they weren't before => edit image, then delete all tags on it
+                    cloudinary.uploader.explicit(public_id, context={
+                        '_user': current_user.slack_id,
+                        'title': form.title.data
+                    })
+                    cloudinary.uploader.remove_all_tags([public_id])
+                else:
+                    cloudinary.uploader.explicit(public_id, tags=form.tags.data, context={
+                        '_user': current_user.slack_id,
+                        'title': form.title.data
+                    })
+            return redirect(url_for(Gallery.endpoint))
         else:
             return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected,
                                    s_tags_selected=s_tags_selected)

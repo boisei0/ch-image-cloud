@@ -12,9 +12,9 @@ class Select2MultipleField(SelectMultipleField):
 
     def process_formdata(self, valuelist):
         if valuelist:
-            self.data = ",".join(valuelist)
+            self.data = valuelist
         else:
-            self.data = ""
+            self.data = []
 
 
 class UploadForm(FlaskForm):
