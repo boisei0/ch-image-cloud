@@ -37,6 +37,9 @@ class Index(View):
     endpoint = 'index'
 
     def dispatch_request(self):
+        if current_user is not None:
+            return redirect(url_for(Gallery.endpoint))
+
         return render_template('index.html', client_id=SLACK_CLIENT_ID, state=SLACK_OAUTH_STATE)
 
 
@@ -201,7 +204,7 @@ class Logout(View):
 
     def dispatch_request(self):
         logout_user()
-        return redirect(url_for('index'))
+        return redirect(url_for(Index.endpoint))
 
 
 class APITags(View):

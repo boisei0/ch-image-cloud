@@ -2,6 +2,7 @@ cloudinary
 flask
 jinja2
 werkzeug
+itsdangerous
 requests
 gunicorn
 flask-sqlalchemy
