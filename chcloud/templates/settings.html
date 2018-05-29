@@ -5,6 +5,8 @@
     <h1>Settings</h1>
 
     <form method="POST" action="{{ url_for('settings') }}">
+        {{ form.hidden_tag() }}
+
         <div class="form-group">
             {{ form.show_nsfw.label }}
             {{ form.show_nsfw(class_='form-control') }}

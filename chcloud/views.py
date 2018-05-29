@@ -192,7 +192,6 @@ class Settings(View):
             db.session.commit()
             return redirect(url_for(Gallery.endpoint))
         else:
-            print(form.show_nsfw.errors, form.submit.errors, form.errors)
             return render_template('settings.html', form=form)
 
 
