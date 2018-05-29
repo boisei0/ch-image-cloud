@@ -3,6 +3,8 @@
 {% block title %}{{ super() }} - Gallery{% endblock title %}
 
 {% block content %}
+    <span>NSFW content is hidden by default, unless you allow it to be displayed in your <a>settings</a></span>
+
     <h1>Gallery</h1>
     <div class="card-deck">
         {% for photo in uploads %}

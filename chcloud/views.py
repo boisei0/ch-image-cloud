@@ -85,29 +85,14 @@ class Gallery(View):
     def dispatch_request(self):
         uploads = cloudinary.api.resources(tags=True, context=True)['resources']
 
-        # # preprocess uploads:
-        # for upload in uploads:
-        #     _to_pop = None
-        #     for tag in upload['tags']:
-        #         if tag.startswith('user:'):
-        #             try:
-        #                 user = User.from_tag(tag)
-        #             except ValueError:
-        #                 # mock user
-        #                 _user = namedtuple('User', ['display_name'])
-        #                 user = _user('Unknown user')
-        #             if 'context' not in upload:
-        #                 upload['context'] = {
-        #                     'custom': {
-        #                         '_user': user.display_name
-        #                     }
-        #                 }
-        #             else:
-        #                 upload['context']['custom']['_user'] = user.display_name
-        #             _to_pop = tag
-        #             break
-        #     if _to_pop:
-        #         upload['tags'].remove(_to_pop)
+        # Hide NSFW content
+        if not current_user.show_nsfw:
+            _to_pop = []
+            for i, upload in enumerate(uploads):
+                if 'nsfw' in upload['tags']:
+                    _to_pop.append(i)
+            for i in _to_pop:
+                uploads.pop(i)
 
         for upload in uploads:
             if 'context' not in upload:
