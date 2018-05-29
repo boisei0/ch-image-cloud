@@ -35,5 +35,5 @@ class UploadEditForm(FlaskForm):
 
 
 class SettingsForm(FlaskForm):
-    show_nsfw = BooleanField('Show NSFW content: ')
+    show_nsfw = BooleanField('Show NSFW content')
     submit = SubmitField('Save')
