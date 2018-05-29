@@ -49,7 +49,6 @@ class CloudinaryURLExtension(Extension):
         return output
 
     def render(self, source, options, caller=None):
-        print('IN CloudinaryURLExtension')
         if not isinstance(source, cloudinary.CloudinaryResource):
             source = cloudinary.CloudinaryResource(source)
 
@@ -60,7 +59,6 @@ class CloudinaryTagExtension(CloudinaryURLExtension):
     tags = {'cloudinary'}
 
     def render(self, image, options, caller=None):
-        print('IN CloudinaryTagExtension')
         if not isinstance(image, cloudinary.CloudinaryResource):
             image = cloudinary.CloudinaryResource(image)
 
