@@ -4,7 +4,12 @@
 
 {% block content %}
     {% if not current_user.show_nsfw %}
-        <span>NSFW content is hidden by default, unless you allow it to be displayed in your <a>settings</a></span>
+        <div class="alert alert-info alert-dismissable fade show" role="alert">
+            NSFW content is hidden by default, unless you allow it to be displayed in your <a href="{{ url_for('settings') }}" class="alert-link">settings</a>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
     {% endif %}
 
     <h1>Gallery</h1>
