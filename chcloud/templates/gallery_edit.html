@@ -12,6 +12,8 @@
     <form method="post" enctype="multipart/form-data" novalidate action="{{ url_for('gallery_edit', public_id=public_id) }}">
         {{ form.hidden_tag() }}
 
+        <input type="hidden" value="{{ s_tags_selected }}" name="s_tags_selected">
+
         {% if public_id is none %}
             <div class="form-group">
                 {{ form.image.label }}

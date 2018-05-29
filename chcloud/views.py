@@ -1,9 +1,8 @@
 # encoding=utf-8
-from collections import namedtuple
-
 from flask import request, jsonify, render_template, redirect, url_for
 from flask.views import View, MethodView
 from werkzeug.exceptions import BadRequest
+from itsdangerous import URLSafeSerializer
 
 import requests
 from flask_login import login_user, login_required, current_user
@@ -14,7 +13,8 @@ import cloudinary.uploader
 
 from .config import (
     SLACK_OAUTH_STATE, SLACK_CLIENT_ID, SLACK_CLIENT_SECRET, SLACK_CH_TEAM_ID,
-    CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET
+    CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET,
+    SECRET_KEY
 )
 from .application import db, login_manager
 from .models import User
@@ -116,6 +116,7 @@ class Gallery(View):
 class GalleryEdit(MethodView):
     endpoint = 'gallery_edit'
     decorators = [login_required]
+    _serialiser = URLSafeSerializer(SECRET_KEY)
 
     def get(self, public_id=None):
         if public_id is None:
@@ -131,16 +132,30 @@ class GalleryEdit(MethodView):
 
         form.tags.choices = [('placeholder', 'placeholder')]
 
-        return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected)
+        return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected,
+                               s_tags_selected=self._serialiser.dumps(tags_selected))
 
     def post(self, public_id=None):
-        form = UploadForm()
+        if public_id is None:
+            # new upload
+            form = UploadForm()
+        else:
+            form = UploadEditForm()
+
+        s_tags_selected = request.form.get('s_tags_selected')
+        tags_selected = self._serialiser.loads(s_tags_selected)
 
         if form.validate_on_submit():
+            print(form.tags.data)
             if public_id is None:
                 # new upload
                 # TODO: continue here
                 cloudinary.uploader.upload(form.image.data)
+            else:
+                pass
+        else:
+            return render_template('gallery_edit.html', form=form, public_id=public_id, tags_selected=tags_selected,
+                                   s_tags_selected=s_tags_selected)
 
 
 class APITags(View):
