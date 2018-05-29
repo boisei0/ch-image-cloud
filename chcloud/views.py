@@ -80,5 +80,5 @@ class Gallery(View):
 
     def dispatch_request(self):
         uploads = cloudinary.api.resources()
-        return render_template('gallery.html', uploads=uploads)
+        return render_template('gallery.html', uploads=uploads['resources'])
 
